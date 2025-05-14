@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClsLib;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,36 @@ class Program
 {
     static void Main()
     {
+        // Auth
+        ClsAdminUser AU = new();
+        bool isAuthenticated = false;
+        int wrongAuthCounter = 0;
+
+        while (isAuthenticated == false)
+        {
+            Console.Write("Username: ");
+            AU.Username = Console.ReadLine()!;
+            Console.Write("Password: ");
+            AU.Password = Console.ReadLine()!;
+            isAuthenticated = AU.Auth();
+            if (isAuthenticated == true)
+            {
+                Console.WriteLine("Welcome " + AU.Username + "!");
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Wrong username or password!");
+                wrongAuthCounter++;
+                if (wrongAuthCounter == 3)
+                {
+                    Console.WriteLine("Too many auth failures!");
+                    return;
+                }
+            }
+        }
+        
+        // Prompt
         var inputHandler = new InputHandler("commands.json");
         while (true)
         {
