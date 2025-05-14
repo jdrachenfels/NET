@@ -11,4 +11,10 @@
     <ProjectReference Include="..\ClsLib\ClsLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="commands.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
