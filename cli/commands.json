@@ -1,179 +1,6 @@
 ﻿[
   {
     "Parent": "root",
-    "Name": "ip",
-    "Description": "IP-Befehle",
-    "HelpLines": [
-      "Namespace für IP-Kommandos.",
-      "",
-      "Beispiele:",
-      "    ip hostname <FQDN>",
-      "    ip address <NETDEV> <IP> <NETMASK>"
-    ]
-  },
-  {
-    "Parent": "ip",
-    "Name": "hostname",
-    "Description": "Hostname setzen",
-    "HelpLines": [
-      "Verwende diesen Befehl, um den Hostnamen zu konfigurieren.",
-      "",
-      "Usage:",
-      "    ip hostname <FQDN>",
-      "",
-      "Parameter:",
-      "    <FQDN>  Fully Qualified Domain Name, z.B. 'server.domain.local'."
-    ]
-  },
-  {
-    "Parent": "ip hostname",
-    "Name": "<FQDN>",
-    "Description": "FQDN-Parameter",
-    "HelpLines": [
-      "Gib den vollständigen Domain-Namen des Hosts ein.",
-      "Beispiel: 'myserver.example.com'."
-    ]
-  },
-  {
-    "Parent": "ip",
-    "Name": "address",
-    "Description": "IP-Adresse setzen",
-    "HelpLines": [
-      "Konfiguriert eine IP-Adresse auf einem Interface.",
-      "",
-      "Usage:",
-      "    ip address <NETDEV> <IP> <NETMASK>"
-    ]
-  },
-  {
-    "Parent": "ip address",
-    "Name": "<NETDEV>",
-    "Description": "Interface",
-    "HelpLines": [
-      "Name des Netzwerk-Interfaces.",
-      "Beispiel: 'eth0', 'netdev0'."
-    ]
-  },
-  {
-    "Parent": "ip address <NETDEV>",
-    "Name": "<IP>",
-    "Description": "IP-Adresse",
-    "HelpLines": [
-      "IPv4-Adresse in dezimaler Schreibweise.",
-      "Beispiel: '192.168.1.10'."
-    ]
-  },
-  {
-    "Parent": "ip address <NETDEV> <IP>",
-    "Name": "<NETMASK>",
-    "Description": "Netzwerkmaske",
-    "HelpLines": [
-      "Subnetzmaske in dezimaler Schreibweise.",
-      "Beispiel: '255.255.255.0'."
-    ]
-  },
-  {
-    "Parent": "root",
-    "Name": "ssl",
-    "Description": "SSL-Befehle",
-    "HelpLines": [
-      "Namespace für SSL/TLS-Kommandos.",
-      "",
-      "Beispiel:",
-      "    ssl certificate add <IP>"
-    ]
-  },
-  {
-    "Parent": "ssl",
-    "Name": "certificate",
-    "Description": "Zertifikat-Verwaltung",
-    "HelpLines": [
-      "Unterkommandos zum Hinzufügen und Verwalten von Zertifikaten."
-    ]
-  },
-  {
-    "Parent": "ssl certificate",
-    "Name": "add",
-    "Description": "Zertifikat hinzufügen",
-    "HelpLines": [
-      "Fügt ein neues SSL-Zertifikat hinzu und speichert es in einer Datei.",
-      "",
-      "Usage:",
-      "    ssl certificate add <IP>",
-      "",
-      "Steps:",
-      "    1. Gib das PEM-Format Zertifikat ein.",
-      "    2. Beende mit einer leeren Zeile.",
-      "    3. Datei wird in cert_<IP>.crt gespeichert."
-    ]
-  },
-  {
-    "Parent": "ssl certificate add",
-    "Name": "<IP>",
-    "Description": "IP-Parameter",
-    "HelpLines": [
-      "IP-Adresse, für die das Zertifikat gilt.",
-      "Beispiel: '1.2.3.4'."
-    ]
-  },
-  {
-    "Parent": "root",
-    "Name": "syslog",
-    "Description": "Syslog-Konfiguration",
-    "HelpLines": [
-      "Konfiguriert Syslog-Server und -Client."
-    ]
-  },
-  {
-    "Parent": "syslog",
-    "Name": "server",
-    "Description": "Server-Konfiguration",
-    "HelpLines": [
-      "Stellt Parameter für den Syslog-Server ein."
-    ]
-  },
-  {
-    "Parent": "syslog server",
-    "Name": "--ip",
-    "Description": "Server-IP",
-    "HelpLines": [
-      "IP-Adresse des Syslog-Servers."
-    ]
-  },
-  {
-    "Parent": "syslog server",
-    "Name": "--port",
-    "Description": "Server-Port",
-    "HelpLines": [
-      "Port des Syslog-Servers."
-    ]
-  },
-  {
-    "Parent": "syslog",
-    "Name": "client",
-    "Description": "Client-Konfiguration",
-    "HelpLines": [
-      "Stellt Parameter für den Syslog-Client ein."
-    ]
-  },
-  {
-    "Parent": "syslog client",
-    "Name": "--target",
-    "Description": "Ziel-Host",
-    "HelpLines": [
-      "Host, an den Syslog-Nachrichten gesendet werden."
-    ]
-  },
-  {
-    "Parent": "syslog client",
-    "Name": "--interval",
-    "Description": "Intervall",
-    "HelpLines": [
-      "Sende-Intervall in Sekunden."
-    ]
-  },
-  {
-    "Parent": "root",
     "Name": "history",
     "Description": "Befehls-Historie",
     "HelpLines": [
@@ -206,6 +33,179 @@
     "Description": "Beenden",
     "HelpLines": [
       "Beendet das Programm."
+    ]
+  },
+  {
+    "Parent": "root",
+    "Name": "command",
+    "Description": "command-description",
+    "HelpLines": [
+      "Help text for command",
+      "Help text for command",
+      "Help text for command"
+    ]
+  },
+  {
+    "Parent": "command",
+    "Name": "parameter",
+    "Description": "parameter-description",
+    "HelpLines": [
+      "Help text for parameter",
+      "Help text for parameter",
+      "Help text for parameter"
+    ]
+  },
+  {
+    "Parent": "command parameter",
+    "Name": "one",
+    "Description": "one-description",
+    "HelpLines": [
+      "Lore Ipsum bafrds fsd fsd fdsa fds sek",
+      "",
+      "Usage:",
+      "    command parameter one <parameter1>",
+      "",
+      "Steps:",
+      "    1. Bla bla bla",
+      "    2. Blup blup blup",
+      "    3. fdsa fdsa fdsa fsda"
+    ]
+  },
+  {
+    "Parent": "command parameter one",
+    "Name": "<parameter1>",
+    "Description": "parameter1-description",
+    "HelpLines": [
+      "fdsa fsda fdsa fsda fsda fdsa",
+      "Sample: '1.2.3.4'."
+    ]
+  },
+  {
+    "Parent": "command parameter",
+    "Name": "file",
+    "Description": "file-description",
+    "HelpLines": [
+      "Lore Ipsum bafrds fsd fsd fdsa fds sek",
+      "",
+      "Usage:",
+      "    command parameter one <parameter1>",
+      "",
+      "Steps:",
+      "    1. Bla bla bla",
+      "    2. Blup blup blup",
+      "    3. fdsa fdsa fdsa fsda"
+    ]
+  },
+  {
+    "Parent": "command parameter file",
+    "Name": "<parameter1>",
+    "Description": "parameter1-description",
+    "HelpLines": [
+      "fdsa fsda fdsa fsda fsda fdsa",
+      "Sample: '1.2.3.4'."
+    ]
+  },
+  {
+    "Parent": "command parameter",
+    "Name": "two",
+    "Description": "two-description",
+    "HelpLines": [
+      "Lore Ipsum bafrds fsd fsd fdsa fds sek",
+      "",
+      "Usage:",
+      "    command parameter two <parameter1> <parameter2>",
+      "",
+      "Steps:",
+      "    1. Bla bla bla",
+      "    2. Blup blup blup",
+      "    3. fdsa fdsa fdsa fsda"
+    ]
+  },
+  {
+    "Parent": "command parameter two",
+    "Name": "<parameter1>",
+    "Description": "parameter1-description",
+    "HelpLines": [
+      "fdsa fsda fdsa fsda fsda fdsa",
+      "Sample: 'Parameter1Value'."
+    ]
+  },
+  {
+    "Parent": "command parameter two",
+    "Name": "<parameter2>",
+    "Description": "parameter2-description",
+    "HelpLines": [
+      "fdsa fsda fdsa fsda fsda fdsa",
+      "Sample: 'Parameter2Value'."
+    ]
+  },
+  {
+    "Parent": "command",
+    "Name": "option",
+    "Description": "option-description",
+    "HelpLines": [
+      "Help text for option",
+      "Help text for option",
+      "Help text for option"
+    ]
+  },
+  {
+    "Parent": "command option",
+    "Name": "one",
+    "Description": "one-description",
+    "HelpLines": [
+      "Lore Ipsum bafrds fsd fsd fdsa fds sek",
+      "",
+      "Usage:",
+      "    command option one --option1",
+      "",
+      "Steps:",
+      "    1. Bla bla bla",
+      "    2. Blup blup blup",
+      "    3. fdsa fdsa fdsa fsda"
+    ]
+  },
+  {
+    "Parent": "command option one",
+    "Name": "--option1",
+    "Description": "option1-description",
+    "HelpLines": [
+      "fdsa fsda fdsa fsda fsda fdsa",
+      "Sample: 'Option1Value'."
+    ]
+  },
+  {
+    "Parent": "command option",
+    "Name": "two",
+    "Description": "two-description",
+    "HelpLines": [
+      "Lore Ipsum bafrds fsd fsd fdsa fds sek",
+      "",
+      "Usage:",
+      "    command option one --option1 --option2",
+      "",
+      "Steps:",
+      "    1. Bla bla bla",
+      "    2. Blup blup blup",
+      "    3. fdsa fdsa fdsa fsda"
+    ]
+  },
+  {
+    "Parent": "command option two",
+    "Name": "--option1",
+    "Description": "option1-description",
+    "HelpLines": [
+      "fdsa fsda fdsa fsda fsda fdsa",
+      "Sample: 'Option1Value'."
+    ]
+  },
+  {
+    "Parent": "command option two",
+    "Name": "--option2",
+    "Description": "option2-description",
+    "HelpLines": [
+      "fdsa fsda fdsa fsda fsda fdsa",
+      "Sample: 'Option2Value'."
     ]
   }
 ]

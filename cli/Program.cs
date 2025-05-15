@@ -76,17 +76,17 @@ class Program
             }
 
             // SSL certificate add (multi-line input)
-            if (trimmedInput.StartsWith("ssl certificate add ", StringComparison.OrdinalIgnoreCase))
+            if (trimmedInput.StartsWith("command parameter file ", StringComparison.OrdinalIgnoreCase))
             {
-                var ip = trimmedInput.Substring("ssl certificate add ".Length).Trim();
-                Console.WriteLine("Enter certificate (end with an empty line):");
+                var parameter1 = trimmedInput.Substring("command parameter file ".Length).Trim();
+                Console.WriteLine("Enter content (end with an empty line):");
                 var certLines = new List<string>();
                 string line;
                 while (!string.IsNullOrEmpty(line = Console.ReadLine() ?? string.Empty))
                 {
                     certLines.Add(line);
                 }
-                var path = $"cert_{ip}.crt";
+                var path = $"file_{parameter1}.txt";
                 File.WriteAllText(path, string.Join(Environment.NewLine, certLines));
                 Console.WriteLine($"Certificate saved to {path}");
                 continue;
