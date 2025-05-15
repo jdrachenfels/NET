@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 class Program
 {
@@ -255,28 +256,56 @@ public class InputHandler
     {
         var input = _currentInput.ToString();
         bool endsWithSpace = input.EndsWith(" ");
-        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var fullTokens = endsWithSpace ? parts : parts.Take(parts.Length - 1);
-        var lastToken = endsWithSpace ? string.Empty : parts.LastOrDefault() ?? string.Empty;
 
+        // 1. Tokenize: Quoted strings bleiben zusammen
+        var allParts = Regex.Matches(input, @"(?<=^|\s)""[^""]*""|\S+")
+                            .Cast<Match>()
+                            .Select(m => m.Value)
+                            .ToArray();
+
+        // 2. Abgeschlossene vs. aktueller Token – auch bei allParts.Length == 0 korrekt
+        var completedTokens = (!endsWithSpace && allParts.Length > 0)
+            ? allParts.Take(allParts.Length - 1).ToArray()
+            : allParts;
+        var lastToken = (endsWithSpace || allParts.Length == 0)
+            ? string.Empty
+            : allParts.Last();
+
+        // 3. Bereits verwendete Optionen herausfiltern
+        var usedOptions = completedTokens
+            .Select(t => t.Trim('"'))
+            .Where(t => t.StartsWith("--"))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        // 4. Kandidaten von der Wurzelebene aus ermitteln
         var candidates = _rootCommands.AsEnumerable();
-        CommandNode current = null;
-        foreach (var token in fullTokens)
+        bool expectingValue = false;
+
+        // 5. Durchlauf abgeschlossener Tokens, skippe Option-Werte
+        foreach (var raw in completedTokens)
         {
-            var match = candidates.FirstOrDefault(n => n.Name.Equals(token, StringComparison.OrdinalIgnoreCase));
+            var token = raw.Trim('"');
+            if (expectingValue)
+            {
+                expectingValue = false;
+                continue;
+            }
+
+            var match = candidates
+                .FirstOrDefault(n => n.Name.Equals(token, StringComparison.OrdinalIgnoreCase));
+
             if (match != null)
             {
-                current = match;
-                candidates = current.Children;
+                if (match.Name.StartsWith("--"))
+                    expectingValue = true;      // nächster Token ist Wert
+                else
+                    candidates = match.Children; // Subcommand-Ebene
             }
             else
             {
-                var param = candidates.FirstOrDefault(n => n.IsParameter);
-                if (param != null)
-                {
-                    current = param;
-                    candidates = current.Children;
-                }
+                var paramNode = candidates.FirstOrDefault(n => n.IsParameter);
+                if (paramNode != null)
+                    candidates = paramNode.Children;
                 else
                 {
                     candidates = Enumerable.Empty<CommandNode>();
@@ -285,15 +314,31 @@ public class InputHandler
             }
         }
 
-        var suggestions = string.IsNullOrEmpty(lastToken)
+        // 6. Vorschläge basierend auf dem unvollständigen letzten Token
+        var prefix = lastToken.Trim('"');
+        var suggestions = string.IsNullOrEmpty(prefix)
             ? candidates
-            : candidates.Where(n => n.Name.StartsWith(lastToken, StringComparison.OrdinalIgnoreCase));
+            : candidates.Where(n =>
+                n.Name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
+
+        // 7. Ausgefilterte, bereits genutzte Optionen entfernen
+        suggestions = suggestions
+            .Where(n => !usedOptions.Contains(n.Name));
 
         if (suggestions.Count() == 1 && !suggestions.First().IsParameter)
+        {
             CompleteToken(suggestions.First(), endsWithSpace, input);
+        }
         else if (suggestions.Any())
-            ShowSuggestions(endsWithSpace ? input : string.Join(" ", fullTokens) + " ", suggestions);
+        {
+            var displayPrefix = endsWithSpace
+                ? input
+                : string.Join(" ", completedTokens) + " ";
+            ShowSuggestions(displayPrefix, suggestions);
+        }
     }
+
+
 
     private void CompleteToken(CommandNode node, bool endsWithSpace, string input)
     {
