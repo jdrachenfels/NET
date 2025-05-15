@@ -2,37 +2,37 @@
   {
     "Parent": "root",
     "Name": "history",
-    "Description": "Befehls-Historie",
+    "Description": "Command history",
     "HelpLines": [
-      "Verwaltet die Kommando-Historie.",
+      "Manages the command history.",
       "",
       "Subcommands:",
-      "    history show   – zeigt alle Befehle an",
-      "    history clear  – leert die Historie"
+      "    history show   – Displays all commands.",
+      "    history clear  – Clears the history."
     ]
   },
   {
     "Parent": "history",
     "Name": "show",
-    "Description": "Historie anzeigen",
+    "Description": "Show history.",
     "HelpLines": [
-      "Zeigt alle zuvor eingegebenen Kommandos an."
+      "Displays all previously entered commands."
     ]
   },
   {
     "Parent": "history",
     "Name": "clear",
-    "Description": "Historie löschen",
+    "Description": "Delete history.",
     "HelpLines": [
-      "Löscht die gesamte Kommando-Historie."
+      "Deletes the entire command history."
     ]
   },
   {
     "Parent": "root",
     "Name": "exit",
-    "Description": "Beenden",
+    "Description": "Exit",
     "HelpLines": [
-      "Beendet das Programm."
+      "Ends the program."
     ]
   },
   {
@@ -85,15 +85,15 @@
     "Name": "file",
     "Description": "file-description",
     "HelpLines": [
-      "Lore Ipsum bafrds fsd fsd fdsa fds sek",
+      "Read in data and save it.",
       "",
       "Usage:",
-      "    command parameter one <parameter1>",
+      "    command parameter file <parameter1>",
       "",
       "Steps:",
-      "    1. Bla bla bla",
-      "    2. Blup blup blup",
-      "    3. fdsa fdsa fdsa fsda"
+      "    1. Enter the content.",
+      "    2. End with an empty line.",
+      "    3. File will be saved as file_<parameter1>.txt."
     ]
   },
   {
@@ -102,7 +102,7 @@
     "Description": "parameter1-description",
     "HelpLines": [
       "fdsa fsda fdsa fsda fsda fdsa",
-      "Sample: '1.2.3.4'."
+      "Sample: 'Parameter1Value'."
     ]
   },
   {
