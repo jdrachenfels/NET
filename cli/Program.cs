@@ -53,7 +53,7 @@ class Program
             {
                 var cmdPath = trimmedInput.TrimEnd('?').TrimEnd();
                 if (!inputHandler.ShowHelp(cmdPath))
-                    Console.WriteLine("Keine Hilfe vorhanden für: " + cmdPath);
+                    Console.WriteLine("No help available for: " + cmdPath);
                 // re-prompt with the same command (without '?') prefilled
                 inputRaw = inputHandler.ReadInput("> ", cmdPath + " ");
                 trimmedInput = inputRaw.TrimEnd();
@@ -79,7 +79,7 @@ class Program
             if (trimmedInput.StartsWith("ssl certificate add ", StringComparison.OrdinalIgnoreCase))
             {
                 var ip = trimmedInput.Substring("ssl certificate add ".Length).Trim();
-                Console.WriteLine("Zertifikat eingeben (Ende mit leerer Zeile):");
+                Console.WriteLine("Enter certificate (end with an empty line):");
                 var certLines = new List<string>();
                 string line;
                 while (!string.IsNullOrEmpty(line = Console.ReadLine() ?? string.Empty))
@@ -88,12 +88,12 @@ class Program
                 }
                 var path = $"cert_{ip}.crt";
                 File.WriteAllText(path, string.Join(Environment.NewLine, certLines));
-                Console.WriteLine($"Zertifikat gespeichert nach {path}");
+                Console.WriteLine($"Certificate saved to {path}");
                 continue;
             }
 
             // Fallback echo
-            Console.WriteLine($"Eingabe: {inputRaw}");
+            Console.WriteLine($"Input: {inputRaw}");
         }
     }
 }
@@ -225,7 +225,7 @@ public class InputHandler
     public void ShowHistory()
     {
         if (_history.Count == 0)
-            Console.WriteLine("Keine Einträge in der Historie.");
+            Console.WriteLine("No entries in history.");
         else
             _history.ForEach(Console.WriteLine);
     }
@@ -359,7 +359,7 @@ public class InputHandler
     private void ShowSuggestions(string prefix, IEnumerable<CommandNode> nodes)
     {
         Console.WriteLine();
-        Console.WriteLine("Vorschläge:");
+        Console.WriteLine("Suggestions:");
         int maxLen = nodes.Max(n => n.Name.Length);
         foreach (var n in nodes)
             Console.WriteLine($"> {n.Name.PadRight(maxLen + 5)}{n.Description}");
