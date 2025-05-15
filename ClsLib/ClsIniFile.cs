@@ -6,6 +6,22 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ClsLib
+
+// Test erfolgreich:
+
+//ClsIniFile INI = new ClsIniFile("Cli.ini");
+//string value = "";
+//value = INI.ReadINI("BAR", "GETRAENK", "Bier");
+//value = INI.ReadINI("BAR", "ESSEN", "Sandwich");
+//value = INI.ReadINI("BAR", "ZEITUNG", "Frankfurter Rundschau");
+//INI.WriteINI("", "STRASSE", "Hauptstrasse 99 A");
+//INI.WriteINI("", "PLZ", "10258");
+//INI.WriteINI("", "STADT", "Berlin");
+//value = INI.ReadINI("", "STRASSE", "Simmlerstrasse 14");
+//Console.WriteLine(value);
+//value = INI.ReadINI("BAR", "ZEITUNG", "Pforzheimer Zeitung");
+//Console.WriteLine(value);
+
 {
     /// <summary>
     /// Klasse zum Lesen und Schreiben von INI-Dateien.
