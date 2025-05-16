@@ -6,22 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ClsLib
-
-// Test erfolgreich:
-
-//ClsIniFile INI = new ClsIniFile("Cli.ini");
-//string value = "";
-//value = INI.ReadINI("BAR", "GETRAENK", "Bier");
-//value = INI.ReadINI("BAR", "ESSEN", "Sandwich");
-//value = INI.ReadINI("BAR", "ZEITUNG", "Frankfurter Rundschau");
-//INI.WriteINI("", "STRASSE", "Hauptstrasse 99 A");
-//INI.WriteINI("", "PLZ", "10258");
-//INI.WriteINI("", "STADT", "Berlin");
-//value = INI.ReadINI("", "STRASSE", "Simmlerstrasse 14");
-//Console.WriteLine(value);
-//value = INI.ReadINI("BAR", "ZEITUNG", "Pforzheimer Zeitung");
-//Console.WriteLine(value);
-
 {
     /// <summary>
     /// Klasse zum Lesen und Schreiben von INI-Dateien.
@@ -29,8 +13,6 @@ namespace ClsLib
     public class ClsIniFile
     {
         private readonly string _filePath;
-        private static readonly Regex ValidNameRegex = new Regex("^[A-Z0-9]+$", RegexOptions.Compiled);
-        private static readonly Regex ValidValueRegex = new Regex("^[\x20-\x7E]*$", RegexOptions.Compiled);
 
         public ClsIniFile(string filePath)
         {
@@ -41,38 +23,66 @@ namespace ClsLib
 
         /// <summary>
         /// Schreibt oder aktualisiert einen INI-Eintrag.
+        /// Legt Verzeichnis und Datei an, falls nötig, ohne Validierungsabbruch.
+        /// Konvertiert AppName und VarName in Großbuchstaben.
         /// </summary>
         public bool WriteINI(string appName, string varName, string varValue)
         {
-            if (!ValidateNames(appName, varName) || !ValidateValue(varValue))
-                return false;
+            // Namen in Großbuchstaben konvertieren
+            var sectionName = string.IsNullOrEmpty(appName)
+                ? string.Empty
+                : appName.ToUpperInvariant();
+            var keyName = varName?.ToUpperInvariant() ?? string.Empty;
 
+            // Verzeichnis sicherstellen
+            var dir = Path.GetDirectoryName(_filePath);
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            // Datei anlegen, falls sie fehlt
+            if (!File.Exists(_filePath))
+                File.WriteAllText(_filePath, string.Empty);
+
+            // Daten laden, Eintrag schreiben und speichern
             var data = Load();
-            var section = string.IsNullOrEmpty(appName) ? string.Empty : appName;
-            if (!data.ContainsKey(section))
-                data[section] = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            data[section][varName] = varValue;
+            if (!data.ContainsKey(sectionName))
+                data[sectionName] = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            data[sectionName][keyName] = varValue;
 
             return Save(data);
         }
 
         /// <summary>
-        /// Liest einen INI-Eintrag. Gibt DefaultValue zurück, wenn nicht gefunden und DefaultValue nicht leer.
+        /// Liest einen INI-Eintrag. Gibt defaultValue zurück, wenn nicht gefunden und defaultValue nicht leer.
+        /// Legt bei fehlender Datei und nicht-leerem defaultValue Datei und Verzeichnis an.
+        /// Konvertiert AppName und VarName in Großbuchstaben.
         /// </summary>
         public string ReadINI(string appName, string varName, string defaultValue)
         {
-            if (!ValidateNames(appName, varName))
-                return defaultValue;
+            // Namen in Großbuchstaben konvertieren
+            var sectionName = string.IsNullOrEmpty(appName)
+                ? string.Empty
+                : appName.ToUpperInvariant();
+            var keyName = varName?.ToUpperInvariant() ?? string.Empty;
 
-            var data = Load();
-            var section = string.IsNullOrEmpty(appName) ? string.Empty : appName;
-            if (data.TryGetValue(section, out var sectionData) && sectionData.TryGetValue(varName, out var val))
+            // Datei- und Verzeichnisanlage bei fehlender Datei
+            if (!File.Exists(_filePath))
             {
-                return val;
+                if (!string.IsNullOrEmpty(defaultValue))
+                {
+                    WriteINI(sectionName, keyName, defaultValue);
+                    return defaultValue;
+                }
+                return string.Empty;
             }
+
+            // INI-Datei existiert: Wert auslesen
+            var data = Load();
+            if (data.TryGetValue(sectionName, out var sectionData) && sectionData.TryGetValue(keyName, out var val))
+                return val;
+
             if (!string.IsNullOrEmpty(defaultValue))
             {
-                WriteINI(appName, varName, defaultValue);
+                WriteINI(sectionName, keyName, defaultValue);
                 return defaultValue;
             }
             return string.Empty;
@@ -80,18 +90,21 @@ namespace ClsLib
 
         /// <summary>
         /// Löscht einen INI-Eintrag.
+        /// Konvertiert AppName und VarName in Großbuchstaben.
         /// </summary>
         public bool DeleteINI(string appName, string varName)
         {
-            if (!ValidateNames(appName, varName))
-                return false;
+            // Namen in Großbuchstaben konvertieren
+            var sectionName = string.IsNullOrEmpty(appName)
+                ? string.Empty
+                : appName.ToUpperInvariant();
+            var keyName = varName?.ToUpperInvariant() ?? string.Empty;
 
             var data = Load();
-            var section = string.IsNullOrEmpty(appName) ? string.Empty : appName;
-            if (data.TryGetValue(section, out var sectionData) && sectionData.Remove(varName))
+            if (data.TryGetValue(sectionName, out var sectionData) && sectionData.Remove(keyName))
             {
                 if (sectionData.Count == 0)
-                    data.Remove(section);
+                    data.Remove(sectionName);
                 return Save(data);
             }
             return false;
@@ -154,18 +167,6 @@ namespace ClsLib
             {
                 return false;
             }
-        }
-
-        private bool ValidateNames(string appName, string varName)
-        {
-            if (!string.IsNullOrEmpty(appName) && !ValidNameRegex.IsMatch(appName))
-                return false;
-            return ValidNameRegex.IsMatch(varName);
-        }
-
-        private bool ValidateValue(string varValue)
-        {
-            return varValue != null && ValidValueRegex.IsMatch(varValue);
         }
     }
 }

@@ -9,33 +9,45 @@ using System.Text.RegularExpressions;
 
 class Program
 {
+    public static class GlobalVars
+    {
+        public static string AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name ?? "APP";
+    }
+
     static void Main()
     {
-        // Auth
-        ClsAdminUser AU = new();
-        bool isAuthenticated = false;
-        int wrongAuthCounter = 0;
+        // Settings
+        ClsIniFile INI = new(GlobalVars.AppName.ToString() + ".ini");
+        bool doAuth = (INI.ReadINI(GlobalVars.AppName, "DOAUTH", "false").ToLower() == "true");
 
-        while (isAuthenticated == false)
+        // Auth
+        if (doAuth)
         {
-            Console.Write("Username: ");
-            AU.Username = Console.ReadLine()!;
-            Console.Write("Password: ");
-            AU.Password = Console.ReadLine()!;
-            isAuthenticated = AU.Auth();
-            if (isAuthenticated == true)
+            ClsAdminUser AU = new();
+            bool isAuthenticated = false;
+            int wrongAuthCounter = 0;
+
+            while (isAuthenticated == false)
             {
-                Console.WriteLine("Welcome " + AU.Username + "!");
-                break;
-            }
-            else
-            {
-                Console.WriteLine("Wrong username or password!");
-                wrongAuthCounter++;
-                if (wrongAuthCounter == 3)
+                Console.Write("Username: ");
+                AU.Username = Console.ReadLine()!;
+                Console.Write("Password: ");
+                AU.Password = Console.ReadLine()!;
+                isAuthenticated = AU.Auth();
+                if (isAuthenticated == true)
                 {
-                    Console.WriteLine("Too many auth failures!");
-                    return;
+                    Console.WriteLine("Welcome " + AU.Username + "!");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Wrong username or password!");
+                    wrongAuthCounter++;
+                    if (wrongAuthCounter == 3)
+                    {
+                        Console.WriteLine("Too many auth failures!");
+                        return;
+                    }
                 }
             }
         }
