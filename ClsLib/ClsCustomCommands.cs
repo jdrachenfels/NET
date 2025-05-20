@@ -25,8 +25,11 @@ namespace ClsLib
         ///   anderercommand anderes egal <FDSA>
         /// </summary>
         /// <param name="trimmedInput">The complete, trimmed user input string.</param>
-        public void Execute(string trimmedInput)
+        public List<string> Execute(string trimmedInput)
         {
+            // Result 
+            List<string> result = new List<string>();
+
             if (string.IsNullOrWhiteSpace(trimmedInput))
                 ProcessUnknown("Input must not be empty.");
 
@@ -50,16 +53,16 @@ namespace ClsLib
                                     switch (sub3)
                                     {
                                         case "one":
-                                            ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(trimmedInput);
                                             break;
                                         case "file":
-                                            ProcessFile(tokens);
+                                            result = ProcessFile(tokens);
                                             break;
                                         case "two":
-                                            ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(trimmedInput);
                                             break;
                                         default:
-                                            ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(trimmedInput);
                                             break;
                                     }
                                 }
@@ -71,52 +74,61 @@ namespace ClsLib
                                     switch (sub3)
                                     {
                                         case "one":
-                                            ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(trimmedInput);
                                             break;
                                         case "two":
-                                            ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(trimmedInput);
                                             break;
                                         default:
-                                            ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(trimmedInput);
                                             break;
                                     }
                                 }
                                 break;
 
                             default:
-                                ProcessUnknown(trimmedInput);
+                                result = ProcessUnknown(trimmedInput);
                                 break;
                         }
                     }
                     break;
 
                 default:
-                    ProcessUnknown(trimmedInput);
+                    result = ProcessUnknown(trimmedInput);
                     break;
             }
+            return result;
         }
 
         /// <summary>
         /// Prosesses unknown line
         /// </summary>
-        private void ProcessUnknown(string line)
+        private List<string> ProcessUnknown(string line)
         {
-            Console.WriteLine("Unknown: " + line);
+            // Result 
+            List<string> result = new List<string>();
+            result.Add("Unknown: " + line);
+
+            return result;
+
         }
 
 
         /// <summary>
         /// Reads multi-line input and saves it to a file named prefix_parameter.txt.
         /// </summary>
-        private void ProcessFile(List<string> tokens)
+        private List<string> ProcessFile(List<string> tokens)
         {
+            // Result 
+            List<string> result = new List<string>();
+
             if (tokens.Count > 3)
             {
                 string prefix = tokens[2];
                 string parameter = tokens[3];
 
                 if (string.IsNullOrEmpty(parameter))
-                    throw new ArgumentException($"Missing parameter for '{prefix}'.", nameof(parameter));
+                    result.Add("Missing parameter for '" + tokens[2] + "'");
 
                 Console.WriteLine("Enter content (end with an empty line):");
                 var lines = new List<string>();
@@ -126,12 +138,13 @@ namespace ClsLib
 
                 var fileName = $"{prefix}_{parameter}.txt";
                 File.WriteAllText(fileName, string.Join(Environment.NewLine, lines));
-                Console.WriteLine($"Content saved to {fileName}");
+                result.Add($"Content saved to {fileName}");
             }
             else
             {
-                ProcessUnknown(string.Join(" ", tokens));
+                result = ProcessUnknown(string.Join(" ", tokens));
             }
+            return result;
         }
     }
 }

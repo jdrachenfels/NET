@@ -89,9 +89,14 @@ class Program
 
             if (trimmedInput.Length > 0)
             {
+
+                List<string> ccResult = new List<string>();
                 // All other commands goes here:
                 ClsCustomCommands CC = new();
-                CC.Execute(trimmedInput);
+                ccResult = CC.Execute(trimmedInput);
+
+                // Write output
+                ccResult.ForEach(Console.WriteLine);
             }
         }
     }

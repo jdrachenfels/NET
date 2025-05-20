@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+package command;
+option csharp_namespace = "ClsLib";
+
+service CommandExecutor {
+  rpc Execute (CommandRequest) returns (CommandReply);
+}
+message CommandRequest { string command = 1; }
+message CommandReply   { string output  = 1; }
