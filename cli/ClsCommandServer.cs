@@ -47,6 +47,7 @@ namespace NET.Cli
         /// </summary>
         public void Start()
         {
+            if (File.Exists(_socketPath)) File.Delete(_socketPath);
             _server.Start();
             Console.WriteLine($"CommandExecutor gRPC server is running on Unix socket: {_socketPath}");
         }
@@ -57,8 +58,7 @@ namespace NET.Cli
         public async Task StopAsync()
         {
             await _server.ShutdownAsync();
-            if (File.Exists(_socketPath))
-                File.Delete(_socketPath);
+            if (File.Exists(_socketPath)) File.Delete(_socketPath);
             Console.WriteLine("CommandExecutor gRPC server stopped and socket removed.");
         }
     }
