@@ -21,7 +21,7 @@ namespace NET.Cli
         public ClsCommandServer(string socketPath)
         {
             if (string.IsNullOrWhiteSpace(socketPath))
-                throw new ArgumentException("Socket-Pfad darf nicht leer sein.", nameof(socketPath));
+                throw new ArgumentException("Socket path must not be empty.", nameof(socketPath));
 
             _socketPath = socketPath;
             var dir = Path.GetDirectoryName(socketPath);
@@ -48,7 +48,7 @@ namespace NET.Cli
         public void Start()
         {
             _server.Start();
-            Console.WriteLine($"CommandExecutor gRPC-Server läuft auf Unix-Socket: {_socketPath}");
+            Console.WriteLine($"CommandExecutor gRPC server is running on Unix socket: {_socketPath}");
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace NET.Cli
             await _server.ShutdownAsync();
             if (File.Exists(_socketPath))
                 File.Delete(_socketPath);
-            Console.WriteLine("CommandExecutor gRPC-Server gestoppt und Socket entfernt.");
+            Console.WriteLine("CommandExecutor gRPC server stopped and socket removed.");
         }
     }
 }

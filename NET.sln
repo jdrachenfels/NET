@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cli", "cli\Cli.csproj", "{0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClsLib", "ClsLib\ClsLib.csproj", "{AB1CB201-0F5E-4E8F-BE58-A21D9EF8E595}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnixSocketClient", "UnixSocketClient\UnixSocketClient.csproj", "{8DE8F444-FDD1-45B9-9073-669373E31BA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AB1CB201-0F5E-4E8F-BE58-A21D9EF8E595}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB1CB201-0F5E-4E8F-BE58-A21D9EF8E595}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB1CB201-0F5E-4E8F-BE58-A21D9EF8E595}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DE8F444-FDD1-45B9-9073-669373E31BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DE8F444-FDD1-45B9-9073-669373E31BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DE8F444-FDD1-45B9-9073-669373E31BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DE8F444-FDD1-45B9-9073-669373E31BA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

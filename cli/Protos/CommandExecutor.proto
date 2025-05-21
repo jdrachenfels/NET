@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 package command;
-option csharp_namespace = "ClsLib";
+option csharp_namespace = "NET.Cli";
 
 service CommandExecutor {
   rpc Execute (CommandRequest) returns (CommandReply);

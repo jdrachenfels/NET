@@ -1,4 +1,5 @@
 ﻿using ClsLib;
+using NET.Cli;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,89 +15,126 @@ class Program
         public static string AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name ?? "APP";
     }
 
-    static void Main()
+    static async Task Main(string[] args)
     {
+        // Check for daemon flag
+        bool daemon = args.Contains("-d");
+
         // Settings
         ClsIniFile INI = new(GlobalVars.AppName.ToString() + ".ini");
         bool doAuth = (INI.ReadINI(GlobalVars.AppName, "DOAUTH", "false").ToLower() == "true");
 
-        // Auth
-        if (doAuth)
+        if (daemon)
         {
-            ClsAdminUser AU = new();
-            bool isAuthenticated = false;
-            int wrongAuthCounter = 0;
+            Console.WriteLine("Starting in daemon mode. Waiting for SIGINT/SIGTERM to shut down...");
 
-            while (isAuthenticated == false)
+            // Path to the Unix Domain Socket file
+            var socketPath = GlobalVars.AppName.ToString() + ".sock";
+
+            // Create and start the server
+            var server = new ClsCommandServer(socketPath);
+            server.Start();
+
+            // Setup shutdown signal handling
+            var shutdown = new ManualResetEventSlim(false);
+            Console.CancelKeyPress += (sender, e) =>
             {
-                Console.Write("Username: ");
-                AU.Username = Console.ReadLine()!;
-                Console.Write("Password: ");
-                AU.Password = Console.ReadLine()!;
-                isAuthenticated = AU.Auth();
-                if (isAuthenticated == true)
+                e.Cancel = true; // Prevent immediate termination
+                shutdown.Set();
+            };
+            AppDomain.CurrentDomain.ProcessExit += (sender, e) =>
+            {
+                shutdown.Set();
+            };
+
+            // Wait for signal
+            shutdown.Wait();
+
+            // Gracefully stop the server
+            await server.StopAsync();
+            Console.WriteLine("Server has been stopped.");
+
+        }
+        else
+        {
+            // Auth
+            if (doAuth)
+            {
+                ClsAdminUser AU = new();
+                bool isAuthenticated = false;
+                int wrongAuthCounter = 0;
+
+                while (isAuthenticated == false)
                 {
-                    Console.WriteLine("Welcome " + AU.Username + "!");
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Wrong username or password!");
-                    wrongAuthCounter++;
-                    if (wrongAuthCounter == 3)
+                    Console.Write("Username: ");
+                    AU.Username = Console.ReadLine()!;
+                    Console.Write("Password: ");
+                    AU.Password = Console.ReadLine()!;
+                    isAuthenticated = AU.Auth();
+                    if (isAuthenticated == true)
                     {
-                        Console.WriteLine("Too many auth failures!");
-                        return;
+                        Console.WriteLine("Welcome " + AU.Username + "!");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong username or password!");
+                        wrongAuthCounter++;
+                        if (wrongAuthCounter == 3)
+                        {
+                            Console.WriteLine("Too many auth failures!");
+                            return;
+                        }
                     }
                 }
             }
-        }
-        
-        // Prompt
-        var inputHandler = new InputHandler("commands.json");
-        while (true)
-        {
-            // Initial prompt
-            var inputRaw = inputHandler.ReadInput("> ");
-            var trimmedInput = inputRaw.TrimEnd();
 
-            // Help request: display HelpLines and then re-prompt without '?'
-            if (trimmedInput.EndsWith("?"))
+            // Prompt
+            var inputHandler = new InputHandler("commands.json");
+            while (true)
             {
-                var cmdPath = trimmedInput.TrimEnd('?').TrimEnd();
-                if (!inputHandler.ShowHelp(cmdPath))
-                    Console.WriteLine("No help available for: " + cmdPath);
-                // re-prompt with the same command (without '?') prefilled
-                inputRaw = inputHandler.ReadInput("> ", cmdPath + " ");
-                trimmedInput = inputRaw.TrimEnd();
-            }
+                // Initial prompt
+                var inputRaw = inputHandler.ReadInput("> ");
+                var trimmedInput = inputRaw.TrimEnd();
 
-            // Exit
-            if (trimmedInput.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                break;
+                // Help request: display HelpLines and then re-prompt without '?'
+                if (trimmedInput.EndsWith("?"))
+                {
+                    var cmdPath = trimmedInput.TrimEnd('?').TrimEnd();
+                    if (!inputHandler.ShowHelp(cmdPath))
+                        Console.WriteLine("No help available for: " + cmdPath);
+                    // re-prompt with the same command (without '?') prefilled
+                    inputRaw = inputHandler.ReadInput("> ", cmdPath + " ");
+                    trimmedInput = inputRaw.TrimEnd();
+                }
 
-            // History commands
-            if (trimmedInput.Equals("history show", StringComparison.OrdinalIgnoreCase))
-            {
-                inputHandler.ShowHistory();
-                continue;
-            }
-            if (trimmedInput.Equals("history clear", StringComparison.OrdinalIgnoreCase))
-            {
-                inputHandler.ClearHistory();
-                continue;
-            }
+                // Exit
+                if (trimmedInput.Equals("exit", StringComparison.OrdinalIgnoreCase))
+                    break;
 
-            if (trimmedInput.Length > 0)
-            {
+                // History commands
+                if (trimmedInput.Equals("history show", StringComparison.OrdinalIgnoreCase))
+                {
+                    inputHandler.ShowHistory();
+                    continue;
+                }
+                if (trimmedInput.Equals("history clear", StringComparison.OrdinalIgnoreCase))
+                {
+                    inputHandler.ClearHistory();
+                    continue;
+                }
 
-                List<string> ccResult = new List<string>();
-                // All other commands goes here:
-                ClsCustomCommands CC = new();
-                ccResult = CC.Execute(trimmedInput);
+                if (trimmedInput.Length > 0)
+                {
 
-                // Write output
-                ccResult.ForEach(Console.WriteLine);
+                    List<string> ccResult = new List<string>();
+                    // All other commands goes here:
+                    ClsCustomCommands CC = new();
+                    ccResult = CC.Execute(trimmedInput);
+
+                    // Write output
+                    ccResult.ForEach(Console.WriteLine);
+                }
             }
         }
     }
