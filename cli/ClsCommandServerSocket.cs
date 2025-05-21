@@ -9,7 +9,7 @@ namespace NET.Cli
     /// <summary>
     /// Enthält den Unix Domain Socket gRPC-Server für CommandExecutor im CLI-Projekt.
     /// </summary>
-    public class ClsCommandServer
+    public class ClsCommandServerSocket
     {
         private readonly Server _server;
         private readonly string _socketPath;
@@ -18,7 +18,7 @@ namespace NET.Cli
         /// Initialisiert den Server mit dem Socket-Pfad und bindet das CommandExecutor-Service.
         /// </summary>
         /// <param name="socketPath">Filesystem-Pfad für den Unix Domain Socket.</param>
-        public ClsCommandServer(string socketPath)
+        public ClsCommandServerSocket(string socketPath)
         {
             if (string.IsNullOrWhiteSpace(socketPath))
                 throw new ArgumentException("Socket path must not be empty.", nameof(socketPath));

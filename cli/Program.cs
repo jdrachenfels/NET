@@ -17,22 +17,50 @@ class Program
 
     static async Task Main(string[] args)
     {
-        // Check for daemon flag
-        bool daemon = args.Contains("-d");
+        // Parse arguments
+        string serverMode = "socket";
+        string socketPath = GlobalVars.AppName + ".sock";
+        string serverIP = "localhost";
+        int serverPort = 50001;
+        bool doAuth = true;
 
-        // Settings
-        ClsIniFile INI = new(GlobalVars.AppName.ToString() + ".ini");
-        bool doAuth = (INI.ReadINI(GlobalVars.AppName, "DOAUTH", "false").ToLower() == "true");
+        for (int i = 0; i < args.Length; i++)
+        {
+            switch (args[i])
+            {
+                case "--server":
+                    if (i + 1 < args.Length)
+                        serverMode = args[++i].ToLowerInvariant();
+                    break;
+                case "--file":
+                    if (i + 1 < args.Length)
+                        socketPath = args[++i];
+                    break;
+                case "--ip":
+                    if (i + 1 < args.Length)
+                        serverIP = args[++i];
+                    break;
+                case "--port":
+                    if (i + 1 < args.Length && int.TryParse(args[++i], out var p))
+                        serverPort = p;
+                    break;
+                case "--noauth":
+                    doAuth = false;
+                    break;
+                case "--help":
+                    Console.WriteLine($"{GlobalVars.AppName} --server socket --file {socketPath}");
+                    Console.WriteLine($"{GlobalVars.AppName} --server tcp --ip {serverIP} --port {serverPort}");
+                    Console.WriteLine($"{GlobalVars.AppName} --noauth {doAuth}");
+                    break;
+            }
+        }
 
-        if (daemon)
+        if (serverMode == "socket")
         {
             Console.WriteLine("Starting in daemon mode. Waiting for SIGINT/SIGTERM to shut down...");
 
-            // Path to the Unix Domain Socket file
-            var socketPath = GlobalVars.AppName.ToString() + ".sock";
-
             // Create and start the server
-            var server = new ClsCommandServer(socketPath);
+            var server = new ClsCommandServerSocket(socketPath);
             server.Start();
 
             // Setup shutdown signal handling
@@ -55,7 +83,35 @@ class Program
             Console.WriteLine("Server has been stopped.");
 
         }
-        else
+        else if (serverMode == "tcp")
+        {
+            Console.WriteLine("Starting in daemon mode. Waiting for SIGINT/SIGTERM to shut down...");
+
+            // Create and start the server
+            var tcpServer = new ClsCommandServerTcp(serverIP, serverPort);
+            tcpServer.Start();
+
+            // Setup shutdown signal handling
+            var shutdown = new ManualResetEventSlim(false);
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                e.Cancel = true; // Prevent immediate termination
+                shutdown.Set();
+            };
+            AppDomain.CurrentDomain.ProcessExit += (sender, e) =>
+            {
+                shutdown.Set();
+            };
+
+            // Wait for signal
+            shutdown.Wait();
+
+            // Gracefully stop the server
+            await tcpServer.StopAsync();
+            Console.WriteLine("Server has been stopped.");
+
+        }
+        else 
         {
             // Auth
             if (doAuth)
