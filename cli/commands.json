@@ -37,6 +37,83 @@
   },
   {
     "Parent": "root",
+    "Name": "file",
+    "Description": "file-description",
+    "HelpLines": [
+      "Add, show and delete a file",
+      "",
+      "Subcommands:",
+      "    file add     – Add a file.",
+      "    file show    – Show a file.",
+      "    file delete  – Delete a file."
+    ]
+  },
+  {
+    "Parent": "file",
+    "Name": "add",
+    "Description": "Add a file.",
+    "HelpLines": [
+      "Read in data and save it.",
+      "",
+      "Usage:",
+      "    file add <filename>",
+      "",
+      "Steps:",
+      "    1. Enter the content.",
+      "    2. End with an empty line.",
+      "    3. File will be saved as file_<filename>.txt."
+    ]
+  },
+  {
+    "Parent": "file add",
+    "Name": "<filename>",
+    "Description": "Filename",
+    "HelpLines": [
+      "Sample: 'myfile'."
+    ]
+  },
+  {
+    "Parent": "file",
+    "Name": "show",
+    "Description": "Show a file.",
+    "HelpLines": [
+      "Displays the content of a file",
+      "",
+      "Usage:",
+      "    file show <filename>",
+      ""
+    ]
+  },
+  {
+    "Parent": "file show",
+    "Name": "<filename>",
+    "Description": "Filename",
+    "HelpLines": [
+      "Sample: 'myfile'."
+    ]
+  },
+  {
+    "Parent": "file",
+    "Name": "delete",
+    "Description": "Delete a file.",
+    "HelpLines": [
+      "Delete a file",
+      "",
+      "Usage:",
+      "    file delete <filename>",
+      ""
+    ]
+  },
+  {
+    "Parent": "file delete",
+    "Name": "<filename>",
+    "Description": "Filename",
+    "HelpLines": [
+      "Sample: 'myfile'."
+    ]
+  },
+  {
+    "Parent": "root",
     "Name": "command",
     "Description": "command-description",
     "HelpLines": [
@@ -78,31 +155,6 @@
     "HelpLines": [
       "fdsa fsda fdsa fsda fsda fdsa",
       "Sample: '1.2.3.4'."
-    ]
-  },
-  {
-    "Parent": "command parameter",
-    "Name": "file",
-    "Description": "file-description",
-    "HelpLines": [
-      "Read in data and save it.",
-      "",
-      "Usage:",
-      "    command parameter file <parameter1>",
-      "",
-      "Steps:",
-      "    1. Enter the content.",
-      "    2. End with an empty line.",
-      "    3. File will be saved as file_<parameter1>.txt."
-    ]
-  },
-  {
-    "Parent": "command parameter file",
-    "Name": "<parameter1>",
-    "Description": "parameter1-description",
-    "HelpLines": [
-      "fdsa fsda fdsa fsda fsda fdsa",
-      "Sample: 'Parameter1Value'."
     ]
   },
   {

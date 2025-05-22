@@ -42,6 +42,32 @@ namespace ClsLib
             var sub1 = (tokens.Count > 0) ? tokens[0] : ("");
             switch (sub1)
             {
+                case "file":
+                    {
+                        var sub2 = (tokens.Count > 1) ? tokens[1] : ("");
+                        switch (sub2)
+                        {
+                            case "add":
+                                {
+                                    result = AddFile(tokens);
+                                    break;
+                                }
+                            case "delete":
+                                {
+                                    result = DeleteFile(tokens);
+                                    break;
+                                }
+                            case "show":
+                                {
+                                    result = ShowFile(tokens);
+                                    break;
+                                }
+                            default:
+                                result = ProcessUnknown(trimmedInput);
+                                break;
+                        }
+                        break;
+                    }
                 case "command":
                     {
                         var sub2 = (tokens.Count > 1) ? tokens[1] : ("");
@@ -54,9 +80,6 @@ namespace ClsLib
                                     {
                                         case "one":
                                             result = ProcessUnknown(trimmedInput);
-                                            break;
-                                        case "file":
-                                            result = ProcessFile(tokens);
                                             break;
                                         case "two":
                                             result = ProcessUnknown(trimmedInput);
@@ -113,32 +136,38 @@ namespace ClsLib
 
         }
 
-
         /// <summary>
-        /// Reads multi-line input and saves it to a file named prefix_parameter.txt.
+        /// Reads multi-line input and saves it to a file named file_parameter.txt.
         /// </summary>
-        private List<string> ProcessFile(List<string> tokens)
+        private List<string> AddFile(List<string> tokens)
         {
             // Result 
             List<string> result = new List<string>();
 
-            if (tokens.Count > 3)
+            if (tokens.Count > 2)
             {
-                string prefix = tokens[2];
-                string parameter = tokens[3];
+                string parameter = tokens[2];
 
                 if (string.IsNullOrEmpty(parameter))
-                    result.Add("Missing parameter for '" + tokens[2] + "'");
+                    result.Add("Missing parameter for '" + tokens[1] + "'");
 
-                Console.WriteLine("Enter content (end with an empty line):");
-                var lines = new List<string>();
-                string line;
-                while (!string.IsNullOrEmpty(line = Console.ReadLine() ?? string.Empty))
-                    lines.Add(line);
+                var fileName = $"file_{parameter}.txt";
 
-                var fileName = $"{prefix}_{parameter}.txt";
-                File.WriteAllText(fileName, string.Join(Environment.NewLine, lines));
-                result.Add($"Content saved to {fileName}");
+                if (File.Exists(fileName))
+                {
+                    result.Add($"File {fileName} already exist.");
+                }
+                else
+                {
+                    Console.WriteLine("Enter content (end with an empty line):");
+                    var lines = new List<string>();
+                    string line;
+                    while (!string.IsNullOrEmpty(line = Console.ReadLine() ?? string.Empty))
+                        lines.Add(line);
+
+                    File.WriteAllText(fileName, string.Join(Environment.NewLine, lines));
+                    result.Add($"Content saved to {fileName}");
+                }
             }
             else
             {
@@ -146,6 +175,76 @@ namespace ClsLib
             }
             return result;
         }
+
+        /// <summary>
+        /// Reads multi-line input and saves it to a file named file_parameter.txt.
+        /// </summary>
+        private List<string> ShowFile(List<string> tokens)
+        {
+            // Result 
+            List<string> result = new List<string>();
+
+            if (tokens.Count > 2)
+            {
+                string parameter = tokens[2];
+
+                if (string.IsNullOrEmpty(parameter))
+                    result.Add("Missing parameter for '" + tokens[1] + "'");
+
+                var fileName = $"file_{parameter}.txt";
+
+                if (File.Exists(fileName))
+                {
+                    var fileContent = File.ReadAllText(fileName);
+                    foreach (string line in fileContent.Split(Environment.NewLine))
+                        result.Add(line);
+                }
+                else
+                {
+                    result.Add($"File {fileName} does not exist.");
+                }
+            }
+            else
+            {
+                result = ProcessUnknown(string.Join(" ", tokens));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Delete a file named file_parameter.txt.
+        /// </summary>
+        private List<string> DeleteFile(List<string> tokens)
+        {
+            // Result 
+            List<string> result = new List<string>();
+
+            if (tokens.Count > 2)
+            {
+                string parameter = tokens[2];
+
+                if (string.IsNullOrEmpty(parameter))
+                    result.Add("Missing parameter for '" + tokens[1] + "'");
+
+                var fileName = $"file_{parameter}.txt";
+
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                    result.Add($"File {fileName} deleted.");
+                }
+                else
+                {
+                    result.Add($"File {fileName} does not exist.");
+                }
+            }
+            else
+            {
+                result = ProcessUnknown(string.Join(" ", tokens));
+            }
+            return result;
+        }
+
     }
 }
 

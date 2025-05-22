@@ -18,7 +18,7 @@ class Program
     static async Task Main(string[] args)
     {
         // Parse arguments
-        string serverMode = "socket";
+        string serverMode = "";
         string socketPath = GlobalVars.AppName + ".sock";
         string serverIP = "localhost";
         int serverPort = 50001;
