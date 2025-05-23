@@ -26,7 +26,7 @@ class Program
 
         for (int i = 0; i < args.Length; i++)
         {
-            switch (args[i])
+            switch (args[i].ToLower())
             {
                 case "--server":
                     if (i + 1 < args.Length)
@@ -49,8 +49,13 @@ class Program
                     break;
                 case "--help":
                     Console.WriteLine($"{GlobalVars.AppName} --server socket --file {socketPath}");
+                    Console.WriteLine($"{GlobalVars.AppName} --server socket");
                     Console.WriteLine($"{GlobalVars.AppName} --server tcp --ip {serverIP} --port {serverPort}");
+                    Console.WriteLine($"{GlobalVars.AppName} --server tcp --ip {serverIP}");
+                    Console.WriteLine($"{GlobalVars.AppName} --server tcp");
                     Console.WriteLine($"{GlobalVars.AppName} --noauth {doAuth}");
+                    Console.WriteLine($"{GlobalVars.AppName}");
+                    Environment.Exit(0);
                     break;
             }
         }

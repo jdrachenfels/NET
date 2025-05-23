@@ -23,7 +23,7 @@ namespace NET.Cli
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Command must not be empty."));
 
             // Execute liefert nun eine Liste von Strings
-            List<string> results = _executor.Execute(request.Command);
+            List<string> results = _executor.Execute(request.Command, request.Textfile);
 
             // Zusammenpacken in den CommandReply (mit repeated string Output)
             var reply = new CommandReply();

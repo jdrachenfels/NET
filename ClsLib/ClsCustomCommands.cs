@@ -25,7 +25,7 @@ namespace ClsLib
         ///   anderercommand anderes egal <FDSA>
         /// </summary>
         /// <param name="trimmedInput">The complete, trimmed user input string.</param>
-        public List<string> Execute(string trimmedInput)
+        public List<string> Execute(string trimmedInput, string textFile = "")
         {
             // Result 
             List<string> result = new List<string>();
@@ -49,7 +49,7 @@ namespace ClsLib
                         {
                             case "add":
                                 {
-                                    result = AddFile(tokens);
+                                    result = AddFile(tokens, textFile);
                                     break;
                                 }
                             case "delete":
@@ -139,7 +139,7 @@ namespace ClsLib
         /// <summary>
         /// Reads multi-line input and saves it to a file named file_parameter.txt.
         /// </summary>
-        private List<string> AddFile(List<string> tokens)
+        private List<string> AddFile(List<string> tokens, string textFile = "")
         {
             // Result 
             List<string> result = new List<string>();
@@ -159,19 +159,28 @@ namespace ClsLib
                 }
                 else
                 {
-                    Console.WriteLine("Enter content (end with an empty line):");
-                    var lines = new List<string>();
-                    string line;
-                    while (!string.IsNullOrEmpty(line = Console.ReadLine() ?? string.Empty))
-                        lines.Add(line);
+                    if (!string.IsNullOrEmpty(textFile))
+                    {
+                        File.WriteAllText(fileName, textFile);
+                        result.Add($"Content saved to {fileName} ({textFile.Length})");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Enter content (end with an empty line):");
+                        var lines = new List<string>();
+                        string line;
+                        while (!string.IsNullOrEmpty(line = Console.ReadLine() ?? string.Empty))
+                            lines.Add(line);
 
-                    File.WriteAllText(fileName, string.Join(Environment.NewLine, lines));
-                    result.Add($"Content saved to {fileName}");
+                        File.WriteAllText(fileName, string.Join(Environment.NewLine, lines));
+                        result.Add($"Content saved to {fileName}");
+                    }
                 }
             }
             else
             {
                 result = ProcessUnknown(string.Join(" ", tokens));
+                result.Add($" tokens.count {tokens.Count}");
             }
             return result;
         }

@@ -66,8 +66,9 @@ namespace TestClient
 
             // Create client and send command
             var client = new CommandExecutor.CommandExecutorClient(channel);
-            var commandText = "command option one --option1 \"bla bla bla\"";
-            var request = new CommandRequest { Command = commandText };
+            var commandText = "file add filename";
+            var commandTextFile = "this is the content of the text file with name <filename>...";
+            var request = new CommandRequest { Command = commandText, Textfile = commandTextFile };
 
             try
             {
