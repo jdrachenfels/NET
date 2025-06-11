@@ -31,7 +31,7 @@ namespace ClsLib
             List<string> result = new List<string>();
 
             if (string.IsNullOrWhiteSpace(trimmedInput))
-                ProcessUnknown("Input must not be empty.");
+                ProcessUnknown(new List<string>(), "Input must not be empty.");
 
             // Tokens splitten (Quoted strings stay together.)
             var matches = Regex.Matches(trimmedInput, @"(?<=^|\s)""[^""]*""|\S+");
@@ -63,7 +63,7 @@ namespace ClsLib
                                     break;
                                 }
                             default:
-                                result = ProcessUnknown(trimmedInput);
+                                result = ProcessUnknown(tokens, trimmedInput);
                                 break;
                         }
                         break;
@@ -79,13 +79,13 @@ namespace ClsLib
                                     switch (sub3)
                                     {
                                         case "one":
-                                            result = ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(tokens, trimmedInput);
                                             break;
                                         case "two":
-                                            result = ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(tokens, trimmedInput);
                                             break;
                                         default:
-                                            result = ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(tokens, trimmedInput);
                                             break;
                                     }
                                 }
@@ -97,27 +97,27 @@ namespace ClsLib
                                     switch (sub3)
                                     {
                                         case "one":
-                                            result = ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(tokens, trimmedInput);
                                             break;
                                         case "two":
-                                            result = ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(tokens, trimmedInput);
                                             break;
                                         default:
-                                            result = ProcessUnknown(trimmedInput);
+                                            result = ProcessUnknown(tokens, trimmedInput);
                                             break;
                                     }
                                 }
                                 break;
 
                             default:
-                                result = ProcessUnknown(trimmedInput);
+                                result = ProcessUnknown(tokens, trimmedInput);
                                 break;
                         }
                     }
                     break;
 
                 default:
-                    result = ProcessUnknown(trimmedInput);
+                    result = ProcessUnknown(tokens, trimmedInput);
                     break;
             }
             return result;
@@ -126,11 +126,16 @@ namespace ClsLib
         /// <summary>
         /// Prosesses unknown line
         /// </summary>
-        private List<string> ProcessUnknown(string line)
+        private List<string> ProcessUnknown(List<string> tokens, string line)
         {
             // Result 
             List<string> result = new List<string>();
             result.Add("Unknown: " + line);
+
+            foreach (string m in tokens)
+            {
+                result.Add(m);
+            }
 
             return result;
 
@@ -179,7 +184,7 @@ namespace ClsLib
             }
             else
             {
-                result = ProcessUnknown(string.Join(" ", tokens));
+                result = ProcessUnknown(tokens, string.Join(" ", tokens));
                 result.Add($" tokens.count {tokens.Count}");
             }
             return result;
@@ -215,7 +220,7 @@ namespace ClsLib
             }
             else
             {
-                result = ProcessUnknown(string.Join(" ", tokens));
+                result = ProcessUnknown(tokens, string.Join(" ", tokens));
             }
             return result;
         }
@@ -249,7 +254,7 @@ namespace ClsLib
             }
             else
             {
-                result = ProcessUnknown(string.Join(" ", tokens));
+                result = ProcessUnknown(tokens, string.Join(" ", tokens));
             }
             return result;
         }

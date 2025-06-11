@@ -159,7 +159,7 @@ class Program
                 var trimmedInput = inputRaw.TrimEnd();
 
                 // Help request: display HelpLines and then re-prompt without '?'
-                if (trimmedInput.EndsWith("?"))
+                while (trimmedInput.EndsWith("?"))
                 {
                     var cmdPath = trimmedInput.TrimEnd('?').TrimEnd();
                     if (!inputHandler.ShowHelp(cmdPath))
@@ -310,9 +310,15 @@ public class InputHandler
                 ReDrawLine(prompt);
             }
             else if (key.Key == ConsoleKey.LeftArrow && _cursorPosition > 0)
+            {
                 _cursorPosition--;
+                ReDrawLine(prompt);
+            }
             else if (key.Key == ConsoleKey.RightArrow && _cursorPosition < _currentInput.Length)
+            {
                 _cursorPosition++;
+                ReDrawLine(prompt);
+            }
             else if (key.Key == ConsoleKey.UpArrow)
                 NavigateHistory(-1, prompt);
             else if (key.Key == ConsoleKey.DownArrow)
