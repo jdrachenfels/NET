@@ -160,7 +160,7 @@ namespace ClsLib
 
                 if (File.Exists(fileName))
                 {
-                    result.Add($"File {fileName} already exist.");
+                    result.Add($"File {fileName} already exists.");
                 }
                 else
                 {
