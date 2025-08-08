@@ -191,11 +191,11 @@ namespace ClsLib
         }
 
         /// <summary>
-        /// Reads multi-line input and saves it to a file named file_parameter.txt.
+        /// Reads the contents of file_parameter.txt and returns the lines.
         /// </summary>
         private List<string> ShowFile(List<string> tokens)
         {
-            // Result 
+            // Result
             List<string> result = new List<string>();
 
             if (tokens.Count > 2)
