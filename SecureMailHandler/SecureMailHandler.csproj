@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClsLib\ClsLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Rebex.Mail" Version="7.0.9313" />
+    <PackageReference Include="Rebex.Networking" Version="7.0.9313" />
+    <PackageReference Include="Rebex.Smtp" Version="7.0.9313" />
+  </ItemGroup>
+</Project>

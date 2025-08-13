@@ -12,7 +12,9 @@ class Program
 {
     public static class GlobalVars
     {
-        public static string AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name ?? "APP";
+        public static string AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name ?? "AppName";
+        public static string EntryAppName = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Name ?? "EntryAppName";
+        public static string CallingAppName = System.Reflection.Assembly.GetCallingAssembly()?.GetName()?.Name ?? "CallingAppName";
     }
 
     static async Task Main(string[] args)
