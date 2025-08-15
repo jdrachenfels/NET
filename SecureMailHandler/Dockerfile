@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Lokale Rebex-DLLs VOR Restore/Pub bereitstellen (Pfad passt zu HintPath ..\libs\Rebex\)
-COPY libs/Rebex/ libs/Rebex/
+COPY libs/ libs/
 
 # Nur das Nötige kopieren
 COPY ClsLib/ ClsLib/
