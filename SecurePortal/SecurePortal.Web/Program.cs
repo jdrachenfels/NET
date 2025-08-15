@@ -54,12 +54,18 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 // Schema-Bootstrap
-using (var scope = app.Services.CreateScope())
-{
-    await using var db = scope.ServiceProvider
-        .GetRequiredService<SecurePortal.Infrastructure.Db.ISimpleDb>();
-    await SecurePortal.Infrastructure.Db.DbBootstrapper.EnsureSchemaAsync(db);
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    await using var db = scope.ServiceProvider
+//        .GetRequiredService<SecurePortal.Infrastructure.Db.ISimpleDb>();
+//    await SecurePortal.Infrastructure.Db.DbBootstrapper.EnsureSchemaAsync(db);
+//}
+
+// Schema-Bootstrap (PG 8.4-kompatibel)
+await using var scope = app.Services.CreateAsyncScope();   // <— statt CreateScope()
+var db = scope.ServiceProvider.GetRequiredService<ISimpleDb>();
+await DbBootstrapper.EnsureSchemaAsync(db);                // db wird beim Scope-Dispose async entsorgt
+
 
 app.Run();
 

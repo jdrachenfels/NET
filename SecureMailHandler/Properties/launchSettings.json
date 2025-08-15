@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SecureMailHandler": {
+      "commandName": "Project",
+      "commandLineArgs": "drachenfels.de johannes demo1.drachenfels.de 1ABC-000DEF-42 20250811125819Z"
+    }
+  }
+}

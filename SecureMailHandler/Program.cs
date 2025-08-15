@@ -13,6 +13,8 @@ using var log = new ClsSyslog(
 
 try
 {
+    //Rebex.Licensing.Key = "==Fk3/eIhrAh+XhXs3Wh57/7a74eQQPgG5qC1c+XNgTNwKh7IheJpYmzpN/V65lP3ga4Hjb==";
+
     // args: domain local_part primary_hostname exim_id [zulu]
     var domain = args.Length > 0 ? args[0] : "unknown";
     var local = args.Length > 1 ? args[1] : "unknown";

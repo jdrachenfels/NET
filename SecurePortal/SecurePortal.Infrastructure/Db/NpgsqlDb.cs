@@ -21,7 +21,7 @@ public sealed class NpgsqlDb : ISimpleDb
         using var cmd = new NpgsqlCommand(sql, _con);
         foreach (var kv in args)
             cmd.Parameters.AddWithValue(kv.Key, kv.Value ?? DBNull.Value);
-        await cmd.PrepareAsync();
+        // await cmd.PrepareAsync();
         return await cmd.ExecuteNonQueryAsync();
     }
 
@@ -30,8 +30,10 @@ public sealed class NpgsqlDb : ISimpleDb
         using var cmd = new NpgsqlCommand(sql, _con);
         foreach (var kv in args)
             cmd.Parameters.AddWithValue(kv.Key, kv.Value ?? DBNull.Value);
-        await cmd.PrepareAsync();
+        
+        // await cmd.PrepareAsync();
         using var rd = await cmd.ExecuteReaderAsync(CommandBehavior.SingleRow);
+        
         if (await rd.ReadAsync()) return map(rd);
         return default;
     }

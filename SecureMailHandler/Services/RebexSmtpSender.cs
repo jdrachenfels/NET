@@ -1,6 +1,7 @@
 using Rebex.Net;
 using Rebex.Mail;
 
+
 namespace SecureMailHandler.Services;
 
 public interface ISmtpSender { Task SendAsync(MailMessage msg); }
