@@ -4,12 +4,12 @@ using System.Text.RegularExpressions;
 using SecureMailHandler.Config;
 using SecureMailHandler.Services;
 
-var cfg = HandlerConfig.FromIni();
+var cfg = HandlerConfig.FromIni("/workdir/workspace/dev/etc/secure-handler.ini");
 using var log = new ClsSyslog(
     enabled: true,
     server: "127.0.0.1", port: 514, protocol: "udp",
     appname: "secure-handler",
-    facility: SyslogFacility.Local0, minLevel: SyslogSeverity.Info);
+    facility: SyslogFacility.Local3, minLevel: SyslogSeverity.Info);
 
 try
 {
@@ -34,6 +34,7 @@ try
 
     var sink = new MaildirSink();
     var smtp = new RebexSmtpSender(cfg.SmtpHost, cfg.SmtpPort);
+    
     var notify = new NotifyService(smtp);
 
     // Ablage

@@ -14,7 +14,7 @@ public sealed class RebexSmtpSender : ISmtpSender
     public async Task SendAsync(MailMessage msg)
     {
         using var smtp = new Smtp();
-        var mode = _port == 465 ? SslMode.Implicit : SslMode.Explicit; // 587/25 => STARTTLS
+        var mode = SslMode.None; // _port == 465 ? SslMode.Implicit : SslMode.Explicit; // 587/25 => STARTTLS
         smtp.Connect(_host, _port, mode);
         await Task.Run(() => smtp.Send(msg));
         smtp.Disconnect();
