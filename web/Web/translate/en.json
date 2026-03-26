@@ -1,0 +1,12 @@
+{
+  "menu.home": "Home",
+  "menu.logout": "Logout",
+  "menu.mailserver": "Mailserver",
+  "menu.routing": "Routing",
+  "menu.domain": "Domain",
+  "menu.smtp": "SMTP",
+  "menu.system": "System",
+  "menu.information": "Information",
+  "menu.help": "Help",
+  "loginfailure": "Login failed"
+}

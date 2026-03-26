@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+.header {
+    background: #2f3a40;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar {
+    width: 200px;
+    background: #eee;
+    float: left;
+    height: 100vh;
+}
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        padding: 10px;
+    }
+
+        .sidebar li ul {
+            margin-left: 10px;
+            background: #ddd;
+        }
+
+.content {
+    margin-left: 200px;
+    padding: 20px;
+}

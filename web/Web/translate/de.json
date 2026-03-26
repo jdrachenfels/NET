@@ -1,0 +1,12 @@
+﻿{
+  "menu.home": "Startseite",
+  "menu.logout": "Abmelden",
+  "menu.mailserver": "Mailserver",
+  "menu.routing": "Routing",
+  "menu.domain": "Domain",
+  "menu.smtp": "SMTP",
+  "menu.system": "System",
+  "menu.information": "Information",
+  "menu.help": "Hilfe",
+  "loginfailure": "Anmeldung fehlgeschlagen"
+}

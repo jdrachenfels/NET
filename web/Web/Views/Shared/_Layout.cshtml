@@ -1,0 +1,47 @@
+﻿@inject Web.Services.WebTranslationService T
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SGG</title>
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">SGG</div>
+        <div class="title">Home</div>
+        <div class="user">
+            Hello @User.Identity?.Name |
+            <a href="/logout">@T.T("menu.logout")</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="sidebar">
+            <ul>
+                <li class="active">@T.T("menu.home")</li>
+
+                <li>@T.T("menu.mailserver")</li>
+
+                <li>
+                    @T.T("menu.routing")
+                    <ul>
+                        <li>@T.T("menu.domain")</li>
+                    </ul>
+                </li>
+
+                <li>@T.T("menu.smtp")</li>
+                <li>@T.T("menu.system")</li>
+                <li>@T.T("menu.information")</li>
+                <li>@T.T("menu.help")</li>
+            </ul>
+        </div>
+
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+
+</body>
+</html>
