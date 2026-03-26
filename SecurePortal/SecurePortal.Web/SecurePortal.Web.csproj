@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SecurePortal.Application\SecurePortal.Application.csproj" />
     <ProjectReference Include="..\SecurePortal.Infrastructure\SecurePortal.Infrastructure.csproj" />
     <ProjectReference Include="..\..\ClsLib\ClsLib.csproj" />
   </ItemGroup>
