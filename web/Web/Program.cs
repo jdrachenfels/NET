@@ -37,13 +37,6 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Optional: Root → /default
-app.MapGet("/", context =>
-{
-    context.Response.Redirect("/default");
-    return Task.CompletedTask;
-});
-
 // Routing
 app.MapControllerRoute(
     name: "default",
