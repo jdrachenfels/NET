@@ -1,0 +1,52 @@
+﻿@inject Web.Services.WebTranslationService T
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Web</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="login-page">
+    <div class="login-panel">
+        <div class="login-header">Login</div>
+
+        <div class="login-body">
+            @if (ViewBag.Error != null)
+            {
+                <div class="login-error">@T.T(ViewBag.Error)</div>
+            }
+
+            <form method="post" action="/default">
+                <div class="form-row">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" />
+                </div>
+
+                <div class="form-row">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" />
+                </div>
+
+                <div class="form-row">
+                    <label for="lang">Language</label>
+                    <select id="lang" name="lang">
+                        <option value="en">English</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn" type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

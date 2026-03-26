@@ -1,32 +1,52 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using Web.Services;
+using Web.Models;
 
 namespace Web.Controllers;
 
 public class AccountController : Controller
 {
     private readonly WebAuthService _auth;
+    private readonly WebSessionService _session;
     private readonly WebSyslogService _log;
 
-    public AccountController(WebAuthService auth, WebSyslogService log)
+    public AccountController(
+        WebAuthService auth,
+        WebSessionService session,
+        WebSyslogService log)
     {
         _auth = auth;
+        _session = session;
         _log = log;
     }
 
+    // GET: / oder /default
+    [HttpGet("/")]
     [HttpGet("/default")]
-    public IActionResult Login() => View();
+    public IActionResult Login()
+    {
+        return View();
+    }
 
+    // POST: /default
     [HttpPost("/default")]
     public async Task<IActionResult> Login(string username, string password, string lang)
     {
-        HttpContext.Session.SetString("lang", lang ?? "en");
+        var user = _auth.Authenticate(username, password);
 
-        if (_auth.Login(username, password))
+        if (user != null)
         {
+            var sessionUser = new WebUserSession
+            {
+                Username = username,
+                Lang = string.IsNullOrWhiteSpace(lang) ? "en" : lang,
+                Permissions = user.GetPermissions()
+            };
+
+            _session.SetUser(sessionUser);
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username)
@@ -47,10 +67,13 @@ public class AccountController : Controller
         return View();
     }
 
+    // GET: /logout
     [HttpGet("/logout")]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync("cookie");
+
+        _session.Clear();
         HttpContext.Session.Clear();
 
         return Redirect("/default");

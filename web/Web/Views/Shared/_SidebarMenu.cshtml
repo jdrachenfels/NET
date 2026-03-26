@@ -1,0 +1,35 @@
+﻿@model List<Web.Models.NavMenuItem>
+@inject Web.Services.WebTranslationService T
+
+<nav class="side-nav">
+    @foreach (var item in Model)
+    {
+        var hasChildren = item.Children != null && item.Children.Count > 0;
+
+        if (!hasChildren)
+        {
+            <a class="side-nav-item @(item.IsActive ? "active" : "")" href="@item.Url">
+                <span class="side-nav-icon">@item.Icon</span>
+                <span>@T.T(item.TextKey)</span>
+            </a>
+        }
+        else
+        {
+            <div class="side-nav-group @(item.IsActive ? "open" : "")">
+                <div class="side-nav-item side-nav-group-header @(item.IsActive ? "active" : "")">
+                    <span class="side-nav-icon">@item.Icon</span>
+                    <span>@T.T(item.TextKey)</span>
+                </div>
+
+                <div class="side-nav-children">
+                    @foreach (var child in item.Children)
+                    {
+                        <a class="side-nav-subitem @(child.IsActive ? "active" : "")" href="@child.Url">
+                            <span>@T.T(child.TextKey)</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    }
+</nav>

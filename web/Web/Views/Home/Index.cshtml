@@ -1,8 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@inject Web.Services.WebTranslationService T
+@inject Web.Services.WebSessionService SessionService
+
+@{
+    ViewData["Title"] = T.T("menu.home");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var user = SessionService.GetUser();
+    var permissions = user?.Permissions ?? new List<string>();
+
+    bool canView = permissions.Contains("home.view");
+    bool canEdit = permissions.Contains("home.edit");
+    bool canOff = permissions.Contains("home.off");
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (!canView)
+{
+    <h1 class="page-title">Access denied</h1>
+    <p>You do not have permission to view this page.</p>
+}
+else
+{
+    <h1 class="page-title">@T.T("menu.home")</h1>
+
+    <div class="card-grid">
+        <section class="card">
+            <div class="card-header">Home</div>
+            <div class="card-body">
+                <p>User: <strong>@(user?.Username ?? "-")</strong></p>
+                <p>Language: <strong>@(user?.Lang ?? "en")</strong></p>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-header">Permissions</div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var permission in permissions)
+                    {
+                        <li>@permission</li>
+                    }
+                </ul>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-header">Actions</div>
+            <div class="card-body">
+                @if (canEdit)
+                {
+                    <button class="btn" type="button">Edit</button>
+                }
+
+                @if (canOff)
+                {
+                    <button class="btn" type="button">Off</button>
+                }
+            </div>
+        </section>
+    </div>
+}

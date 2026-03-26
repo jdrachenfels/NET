@@ -4,7 +4,7 @@ namespace Web.Services;
 
 public class WebAuthService
 {
-    public bool Login(string username, string password)
+    public ClsAdminUser? Authenticate(string username, string password)
     {
         var user = new ClsAdminUser
         {
@@ -12,6 +12,9 @@ public class WebAuthService
             Password = password
         };
 
-        return user.Auth();
+        if (user.Auth())
+            return user;
+
+        return null;
     }
 }

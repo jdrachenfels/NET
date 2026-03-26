@@ -1,47 +1,41 @@
 ﻿@inject Web.Services.WebTranslationService T
+@inject Web.Services.WebMenuService MenuService
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>SGG</title>
-    <link rel="stylesheet" href="/css/site.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
+    <div class="app-shell">
+        <header class="app-header">
+            <div class="app-brand">
+                <div class="app-logo">SGG</div>
+                <div class="app-title">Web - @ViewData["Title"]</div>
+            </div>
 
-    <div class="header">
-        <div class="logo">SGG</div>
-        <div class="title">Home</div>
-        <div class="user">
-            Hello @User.Identity?.Name |
-            <a href="/logout">@T.T("menu.logout")</a>
+            <div class="app-user">
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                    <span>Hello @User.Identity.Name</span>
+                    <span class="app-user-sep">-</span>
+                    <a href="/logout">@T.T("menu.logout")</a>
+                }
+            </div>
+        </header>
+
+        <div class="app-main">
+            <aside class="app-sidebar">
+                @await Html.PartialAsync("_SidebarMenu", MenuService.GetMenu())
+            </aside>
+
+            <main class="app-content">
+                @RenderBody()
+            </main>
         </div>
     </div>
-
-    <div class="main">
-        <div class="sidebar">
-            <ul>
-                <li class="active">@T.T("menu.home")</li>
-
-                <li>@T.T("menu.mailserver")</li>
-
-                <li>
-                    @T.T("menu.routing")
-                    <ul>
-                        <li>@T.T("menu.domain")</li>
-                    </ul>
-                </li>
-
-                <li>@T.T("menu.smtp")</li>
-                <li>@T.T("menu.system")</li>
-                <li>@T.T("menu.information")</li>
-                <li>@T.T("menu.help")</li>
-            </ul>
-        </div>
-
-        <div class="content">
-            @RenderBody()
-        </div>
-    </div>
-
 </body>
 </html>
