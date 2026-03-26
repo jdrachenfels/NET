@@ -1,4 +1,5 @@
 ﻿using ClsLib;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 
@@ -21,9 +22,9 @@ public class WebTranslationService
     public string T(string key)
     {
         var ctx = _http.HttpContext!;
-        var lang = ctx.Session.GetString("lang") ?? "en";
-        //var langBytes = ctx.Session.TryGetValue("lang", out var value) ? value : null;
-        //var lang = langBytes is null ? "en" : System.Text.Encoding.UTF8.GetString(langBytes);
+        //var lang = ctx.Session.GetString("lang") ?? "en";  
+        var langBytes = ctx.Session.TryGetValue("lang", out var value) ? value : null;
+        var lang = langBytes is null ? "en" : System.Text.Encoding.UTF8.GetString(langBytes);
         var page = ctx.Request.Path;
 
         return _translator.Translate(key, lang, page);
