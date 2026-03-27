@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandsTool", "CommandsTool\CommandsTool.csproj", "{13C48228-D5D9-4DE0-9FD9-DAA27AC54590}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{256F4E96-6A73-9ABE-786F-840C672A50F4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "webdir", "webdir", "{256F4E96-6A73-9ABE-786F-840C672A50F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "web\Web\Web.csproj", "{BAD555AD-658B-4815-A533-94975C004CD6}"
 EndProject
@@ -88,9 +88,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{BAD555AD-658B-4815-A533-94975C004CD6} = {256F4E96-6A73-9ABE-786F-840C672A50F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADD9191F-0555-48E9-804D-78AA680844AC}
